@@ -57,6 +57,7 @@ class StateMachineBehaviorObjectBuilderModifier
     {
         return $this->behavior->renderTemplate('objectHumanizedState', array(
             'humanizedStates'   => $this->behavior->getHumanizedStates(),
+            'stateColumnGetter' => $this->getColumnGetter('state_column'),
         ));
     }
 
@@ -77,7 +78,7 @@ class StateMachineBehaviorObjectBuilderModifier
             );
         }
 
-        return $this->behavior->renderTemplate('objectHooks', array(
+        return $this->behavior->renderTemplate('objectIssers', array(
             'issers'            => $issers,
             'stateColumnGetter' => $this->getColumnGetter('state_column'),
         ));

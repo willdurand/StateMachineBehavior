@@ -90,12 +90,12 @@ class StateMachineBehavior extends Behavior
 	}
 
 	public function getHumanizedStates()
-	{
-		if (null === $this->humanizedStates) {
-			foreach ($this->getStates() as $state) {
-				$this->humanizedStates[$state] = $this->humanize($state);
-			}
-		}
+    {
+        if (null === $this->humanizedStates) {
+            foreach ($this->getStates() as $state) {
+                $this->humanizedStates[$state] = $this->humanize($state);
+            }
+        }
 
 		return $this->humanizedStates;
 	}
