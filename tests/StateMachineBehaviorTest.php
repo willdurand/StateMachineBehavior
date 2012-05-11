@@ -23,6 +23,21 @@ class StateMachineBehaviorTest extends \PHPUnit_Framework_TestCase
             <parameter name="transition" value="unpublished to published with publish" />
         </behavior>
     </table>
+    <table name="post_with_custom_column">
+        <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER" />
+
+        <behavior name="state_machine">
+            <parameter name="states" value="draft, published, not_yet_published" />
+
+            <parameter name="initial_state" value="draft" />
+
+            <parameter name="transition" value="draft to published with publish" />
+            <parameter name="transition" value="published to not_yet_published with unpublish" />
+            <parameter name="transition" value="not_yet_published to published with publish" />
+
+            <parameter name="state_column" value="my_state" />
+        </behavior>
+    </table>
 </database>
 EOF;
             $builder = new PropelQuickBuilder();
@@ -57,6 +72,7 @@ EOF;
 
         $this->assertTrue(method_exists('Post', 'getAvailableStates'));
         $this->assertTrue(method_exists('Post', 'getState'));
+        $this->assertTrue(method_exists('Post', 'getHumanizedState'));
 
         $this->assertTrue(defined('Post::STATE_DRAFT'));
         $this->assertTrue(defined('Post::STATE_PUBLISHED'));
@@ -124,5 +140,59 @@ EOF;
         $this->assertFalse($post->isDraft());
         $this->assertTrue($post->isPublished());
         $this->assertFalse($post->isUnpublished());
+    }
+
+    public function testSymbolMethodShouldThrowAnExceptionOnInvalidCall()
+    {
+        $post = new Post();
+
+        $this->assertFalse($post->canUnpublish());
+
+        try {
+            $post->unpublish();
+            $this->fail('Expected exception not thrown') ;
+        } catch (Exception $e) {
+            $this->assertTrue(true);
+            $this->assertInstanceOf('LogicException', $e);
+        }
+    }
+
+    public function testGenerateGetStateIfCustomStateColumn()
+    {
+        $this->assertTrue(method_exists('PostWithCustomColumn', 'getState'));
+        $this->assertTrue(method_exists('PostWithCustomColumn', 'getMyState'));
+        $this->assertTrue(method_exists('PostWithCustomColumn', 'isNotYetPublished'));
+
+        $this->assertTrue(defined('PostWithCustomColumn::STATE_NOT_YET_PUBLISHED'));
+    }
+
+    public function testIssersDefaultValuesWithCustomStateColumn()
+    {
+        $post = new PostWithCustomColumn();
+
+        $this->assertTrue($post->isDraft());
+        $this->assertFalse($post->isPublished());
+        $this->assertFalse($post->isNotYetPublished());
+    }
+
+    public function testCannersDefaultValuesWithCustomStateColumn()
+    {
+        $post = new PostWithCustomColumn();
+
+        $this->assertTrue($post->canPublish());
+        $this->assertFalse($post->canUnpublish());
+    }
+
+    public function testGetHumanizedState()
+    {
+        $post = new PostWithCustomColumn();
+        $this->assertEquals('Draft', $post->getHumanizedState());
+
+        $refl = new ReflectionClass($post);
+        $prop = $refl->getProperty('my_state');
+        $prop->setAccessible(true);
+        $prop->setValue($post, PostWithCustomColumn::STATE_NOT_YET_PUBLISHED);
+
+        $this->assertEquals('Not Yet Published', $post->getHumanizedState());
     }
 }

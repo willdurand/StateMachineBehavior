@@ -127,7 +127,7 @@ class StateMachineBehavior extends Behavior
         if (null === $this->states) {
 			$states = array();
 			foreach (explode(',', $this->getParameter('states')) as $state) {
-				$states[] = strtolower(trim($state));
+                $states[] = strtolower(trim($state));
 			}
 
 			sort($states, SORT_STRING);
@@ -220,8 +220,13 @@ class StateMachineBehavior extends Behavior
 		return strtolower($this->getParameter('initial_state'));
 	}
 
-	protected function humanize($string)
+    public function camelize($string)
+    {
+        return lcfirst(str_replace(' ', '', ucwords(strtr($string, '_-', '  '))));
+    }
+
+    public function humanize($string)
 	{
-		return $string;
-	}
+        return ucwords(str_replace('_', ' ', $string));
+    }
 }

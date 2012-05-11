@@ -42,7 +42,7 @@ class StateMachineBehaviorObjectBuilderModifier
 
     public function addGetState($builder)
     {
-        return $this->behavior->renderTemplate('objectGetAvailableStates', array(
+        return $this->behavior->renderTemplate('objectGetState', array(
             'stateColumnGetter' => $this->getColumnGetter('state_column'),
         ));
     }
@@ -137,27 +137,27 @@ class StateMachineBehaviorObjectBuilderModifier
 
     protected function getStateIsser($state)
     {
-        return 'is' . ucfirst($state);
+        return 'is' . $this->behavior->camelize($state);
     }
 
     protected function getSymbolCanner($symbol)
     {
-        return 'can' . ucfirst($symbol);
+        return 'can' . $this->behavior->camelize($symbol);
     }
 
     protected function getSymbolPreHook($symbol)
     {
-        return 'pre' . ucfirst($symbol);
+        return 'pre' . $this->behavior->camelize($symbol);
     }
 
     protected function getSymbolOnHook($symbol)
     {
-        return 'on' . ucfirst($symbol);
+        return 'on' . $this->behavior->camelize($symbol);
     }
 
     protected function getSymbolPostHook($symbol)
     {
-        return 'post' . ucfirst($symbol);
+        return 'post' . $this->behavior->camelize($symbol);
     }
 
     protected function getStateConstant($state)
