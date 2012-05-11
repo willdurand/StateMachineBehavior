@@ -117,6 +117,8 @@ class StateMachineBehaviorObjectBuilderModifier
                 'preHookMethodName'     => $this->getSymbolPreHook($symbol),
                 'onHookMethodName'      => $this->getSymbolOnHook($symbol),
                 'postHookMethodName'    => $this->getSymbolPostHook($symbol),
+                'stateConstant'         => $this->getStateConstant($this->behavior->getStateForSymbol($symbol)),
+                'stateColumnSetter'     => $this->getColumnSetter('state_column'),
             ));
         }
 

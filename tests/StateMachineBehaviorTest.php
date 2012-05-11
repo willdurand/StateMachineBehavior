@@ -120,7 +120,7 @@ EOF;
         }
 
         $this->assertFalse($post->canPublish());
-        $this->assertTrue($post->canUnublish());
+        $this->assertTrue($post->canUnpublish());
         $this->assertFalse($post->isDraft());
         $this->assertTrue($post->isPublished());
         $this->assertFalse($post->isUnpublished());
