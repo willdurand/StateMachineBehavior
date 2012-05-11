@@ -181,7 +181,36 @@ class StateMachineBehavior extends Behavior
         return $this->symbols;
     }
 
-	public function getExceptionClass()
+    public function getTransitionsBySymbol($symbol)
+    {
+        return array_filter($this->getTransitions(), function ($transition) use ($symbol) {
+            return $symbol === $transition['symbol'];
+        });
+    }
+
+    public function getAntecedentStates($symbol)
+    {
+        return array_map(function ($transition) {
+            return $transition['from'];
+        }, $this->getTransitionsBySymbol($symbol));
+    }
+
+    public function getStateForSymbol($symbol)
+    {
+        $states = array_unique(array_map(function ($transition) {
+            return $transition['to'];
+        }, $this->getTransitionsBySymbol($symbol)));
+
+        if (1 !== count($states)) {
+            throw new LogicException(
+                sprintf('There should be only one state for symbol "%s", got: %s', $symbol, var_export($states, true))
+            );
+        }
+
+        return current($states);
+    }
+
+    public function getExceptionClass()
 	{
 		return 'LogicException';
 	}

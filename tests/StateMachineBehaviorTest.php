@@ -111,6 +111,7 @@ EOF;
         $this->assertTrue($post->isDraft());
         $this->assertFalse($post->isPublished());
         $this->assertFalse($post->isUnpublished());
+        $this->assertTrue($post->canPublish());
 
         try {
             $post->publish();
@@ -118,6 +119,8 @@ EOF;
             $this->fail('Unexpected exception caught: ' . $e->getMessage());
         }
 
+        $this->assertFalse($post->canPublish());
+        $this->assertTrue($post->canUnublish());
         $this->assertFalse($post->isDraft());
         $this->assertTrue($post->isPublished());
         $this->assertFalse($post->isUnpublished());
