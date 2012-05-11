@@ -3,7 +3,7 @@ Feature: State Machine
     As a developer
     I need to use the awesome StateMachineBehavior
 
-    Scenario:
+    Scenario: US Traffic Light Model
         Given the following XML schema:
             """
 <database name="state_machine_behavior" defaultIdMethod="native">
@@ -27,3 +27,16 @@ Feature: State Machine
         When I "prepare" it
         Then I should get an "orange" state
         And I should be able to "start" it
+        But I should not be able to "prepare" it again
+        When I "start" it
+        Then I should get an "green" state
+        And I should be able to "prepare" it
+        But I should not be able to "start" it again
+        When I "prepare" it
+        Then I should get an "orange" state
+        And I should be able to "stop" it
+        But I should not be able to "prepare" it again
+        When I "stop" it
+        Then I should get an "red" state
+        And I should be able to "prepare" it
+        But I should not be able to "stop" it again

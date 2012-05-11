@@ -113,7 +113,7 @@ class StateMachineBehaviorObjectBuilderModifier
                 'canMethodName'         => $this->getSymbolCanner($symbol),
                 'exceptionClass'        => $this->behavior->getExceptionClass(),
                 'modelName'             => $this->getModelName($builder),
-                'stateName'             => '',
+                'stateName'             => $this->behavior->humanize($this->behavior->getStateForSymbol($symbol)),
                 'preHookMethodName'     => $this->getSymbolPreHook($symbol),
                 'onHookMethodName'      => $this->getSymbolOnHook($symbol),
                 'postHookMethodName'    => $this->getSymbolPostHook($symbol),

@@ -77,4 +77,13 @@ class FeatureContext extends BehatContext
         $canner = 'can' . ucfirst($symbolMethod);
         assertTrue($this->instance->$canner());
     }
+
+    /**
+     * @Given /^I should not be able to "([^"]*)" it again$/
+     */
+    public function iShouldNotBeAbleToItAgain($symbolMethod)
+    {
+        $canner = 'can' . ucfirst($symbolMethod);
+        assertFalse($this->instance->$canner());
+    }
 }
