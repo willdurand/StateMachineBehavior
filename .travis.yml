@@ -8,4 +8,6 @@ before_script:
     - curl -s http://getcomposer.org/installer | php
     - php composer.phar --dev install
 
-script: phpunit --coverage-text
+script:
+    - phpunit --coverage-text
+    - ./vendor/behat/behat/bin/behat tests/features

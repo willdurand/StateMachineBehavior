@@ -12,7 +12,13 @@
         "php": ">=5.2.4",
         "propel/propel1": "1.6.*"
     },
+    "require-dev": {
+        "behat/behat": ">=2.2.2"
+    },
     "autoload": {
         "classmap": ["src/"]
+    },
+    "config": {
+        "bin-dir": "bin/"
     }
 }
