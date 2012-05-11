@@ -1,9 +1,9 @@
 
-<?php foreach ($states as $state) : ?>
+<?php foreach ($symbols as $symbol) : ?>
 /**
  *
  */
-public function pre<?php ucfirst($state) ?>(PropelPDO $con = null)
+public function pre<?php echo ucfirst($symbol) ?>(PropelPDO $con = null)
 {
     return true;
 }
@@ -11,14 +11,14 @@ public function pre<?php ucfirst($state) ?>(PropelPDO $con = null)
 /**
  *
  */
-public function on<?php ucfirst($state) ?>(PropelPDO $con = null)
+public function on<?php echo ucfirst($symbol) ?>(PropelPDO $con = null)
 {
 }
 
 /**
  *
  */
-public function post<?php ucfirst($state) ?>(PropelPDO $con = null)
+public function post<?php echo ucfirst($symbol) ?>(PropelPDO $con = null)
 {
 }
 

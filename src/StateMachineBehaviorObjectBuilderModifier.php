@@ -26,7 +26,6 @@ class StateMachineBehaviorObjectBuilderModifier
     public function objectMethods($builder)
     {
         $script  = '';
-
         if (StateMachineBehavior::DEFAULT_STATE_COLUMN !== $this->behavior->getParameter('state_column')) {
             $script .= $this->addGetState($builder);
         }
@@ -35,6 +34,8 @@ class StateMachineBehaviorObjectBuilderModifier
         $script .= $this->addGetHumanizedState($builder);
         $script .= $this->addHooks($builder);
         $script .= $this->addIssers($builder);
+        $script .= $this->addCanners($builder);
+        $script .= $this->addSymbolMethods($builder);
 
         return $script;
     }
@@ -64,7 +65,7 @@ class StateMachineBehaviorObjectBuilderModifier
     public function addHooks($builder)
     {
         return $this->behavior->renderTemplate('objectHooks', array(
-            'states'            => $this->behavior->getStates(),
+            'symbols'           => $this->behavior->getSymbols(),
         ));
     }
 
@@ -84,16 +85,31 @@ class StateMachineBehaviorObjectBuilderModifier
         ));
     }
 
+    public function addCanners($builder)
+    {
+        $script = '';
+        foreach ($this->behavior->getSymbols() as $symbol) {
+            $script .= $this->behavior->renderTemplate('objectCanner', array(
+                'methodName'        => $this->getSymbolCanner($symbol),
+            ));
+        }
+
+        return $script;
+    }
+
     public function addSymbolMethods($builder)
     {
         $script = '';
         foreach ($this->behavior->getSymbols() as $symbol) {
             $script .= $this->behavior->renderTemplate('objectSymbolMethod', array(
-                'methodName'        => strtolower($symbol),
-                'canMethodName'     => $this->getStateCanner($symbol),
-                'exceptionClass'    => $this->behavior->getExceptionClass(),
-                'modelName'         => '',
-                'state'             => '',
+                'methodName'            => strtolower($symbol),
+                'canMethodName'         => $this->getSymbolCanner($symbol),
+                'exceptionClass'        => $this->behavior->getExceptionClass(),
+                'modelName'             => $this->getModelName($builder),
+                'stateName'             => '',
+                'preHookMethodName'     => $this->getSymbolPreHook($symbol),
+                'onHookMethodName'      => $this->getSymbolOnHook($symbol),
+                'postHookMethodName'    => $this->getSymbolPostHook($symbol),
             ));
         }
 
@@ -115,14 +131,29 @@ class StateMachineBehaviorObjectBuilderModifier
         return 'is' . ucfirst($state);
     }
 
-    protected function getStateCanner($state)
+    protected function getSymbolCanner($symbol)
     {
-        return 'can' . ucfirst($state);
+        return 'can' . ucfirst($symbol);
+    }
+
+    protected function getSymbolPreHook($symbol)
+    {
+        return 'pre' . ucfirst($symbol);
+    }
+
+    protected function getSymbolOnHook($symbol)
+    {
+        return 'on' . ucfirst($symbol);
+    }
+
+    protected function getSymbolPostHook($symbol)
+    {
+        return 'post' . ucfirst($symbol);
     }
 
     protected function getStateConstant($state)
     {
-        return 'self::STATE_' . strtolower($state);
+        return 'STATE_' . strtoupper($state);
     }
 
     protected function getModelName($builder)

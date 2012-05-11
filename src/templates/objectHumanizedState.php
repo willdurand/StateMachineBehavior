@@ -4,14 +4,14 @@
  */
 public function getHumanizedState()
 {
-	switch ($this-><?php echo $stateColumnGetter ?>()) {
+    switch ($this-><?php echo $stateColumnGetter ?>()) {
 <?php foreach ($humanizedStates as $state => $humanizedState) : ?>
-		case self::STATE_<?php echo $state ?>:
-			return '<?php echo $humanizedState ?>';
+        case self::STATE_<?php echo strtoupper($state) ?>:
+            return '<?php echo $humanizedState ?>';
 
 <?php endforeach; ?>
-		default:
-	}
+        default:
+    }
 
-	return null;
+    return null;
 }
