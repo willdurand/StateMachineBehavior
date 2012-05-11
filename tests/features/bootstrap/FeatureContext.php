@@ -46,10 +46,19 @@ class FeatureContext extends BehatContext
 
     /**
      * @Given /^I want to manage a "([^"]*)"$/
+     * @Given /^I want to manage an "([^"]*)"$/
      */
     public function iWantToManageA($className)
     {
         $this->instance = new $className();
+    }
+
+    /**
+     * @Given /^Its default state is "([^"]*)"$/
+     */
+    public function itsDefaultStateIs($state)
+    {
+        $this->iShouldGetAnState($state);
     }
 
     /**
@@ -61,6 +70,7 @@ class FeatureContext extends BehatContext
     }
 
     /**
+     * @Then /^I should get a "([^"]*)" state$/
      * @Then /^I should get an "([^"]*)" state$/
      */
     public function iShouldGetAnState($state)
@@ -79,9 +89,10 @@ class FeatureContext extends BehatContext
     }
 
     /**
+     * @Given /^I should not be able to "([^"]*)" it$/
      * @Given /^I should not be able to "([^"]*)" it again$/
      */
-    public function iShouldNotBeAbleToItAgain($symbolMethod)
+    public function iShouldNotBeAbleToIt($symbolMethod)
     {
         $canner = 'can' . ucfirst($symbolMethod);
         assertFalse($this->instance->$canner());
