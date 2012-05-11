@@ -5,25 +5,25 @@
  */
 class StateMachineBehavior extends Behavior
 {
-	/**
-	 * Default state column name
-	 */
-	const DEFAULT_STATE_COLUMN = 'state';
+    /**
+     * Default state column name
+     */
+    const DEFAULT_STATE_COLUMN = 'state';
 
-	/**
-	 * @var array
-	 */
-	protected $parameters = array(
-		'states'         => array(),
-		'initial_state'  => null,
-		'transition'     => array(),
-		'state_column'   => self::DEFAULT_STATE_COLUMN,
-	);
+    /**
+     * @var array
+     */
+    protected $parameters = array(
+        'states'         => array(),
+        'initial_state'  => null,
+        'transition'     => array(),
+        'state_column'   => self::DEFAULT_STATE_COLUMN,
+    );
 
-	/**
-	 * @var array
-	 */
-	protected $states;
+    /**
+     * @var array
+     */
+    protected $states;
 
     /**
      * @var array
@@ -35,9 +35,9 @@ class StateMachineBehavior extends Behavior
      */
     protected $symbols;
 
-	/**
-	 * @var array
-	 */
+    /**
+     * @var array
+     */
     protected $humanizedStates;
 
     /**
@@ -55,16 +55,16 @@ class StateMachineBehavior extends Behavior
      */
     public function addParameter($attribute)
     {
-		if ('transition' === $attribute['name']) {
-			$values = explode('|', $attribute['value']);
+        if ('transition' === $attribute['name']) {
+            $values = explode('|', $attribute['value']);
 
-			if (1 < count($values)) {
-				$this->parameters['transition'] = $values;
-			} else {
-				$this->parameters['transition'][] = $attribute['value'];
-			}
+            if (1 < count($values)) {
+                $this->parameters['transition'] = $values;
+            } else {
+                $this->parameters['transition'][] = $attribute['value'];
+            }
         } else {
-			parent::addParameter($attribute);
+            parent::addParameter($attribute);
         }
     }
 
@@ -74,7 +74,7 @@ class StateMachineBehavior extends Behavior
     public function getParameters()
     {
         $parameters  = parent::getParameters();
-		$parameters['transition'] = implode($parameters['transition'], '|');
+        $parameters['transition'] = implode($parameters['transition'], '|');
 
         return $parameters;
     }
@@ -83,9 +83,9 @@ class StateMachineBehavior extends Behavior
      * {@inheritdoc}
      */
     public function modifyTable()
-	{
-		$states		  = $this->getStates();
-		$defaultValue = array_search($this->getInitialState(), $states);
+    {
+        $states       = $this->getStates();
+        $defaultValue = array_search($this->getInitialState(), $states);
 
 
         // add the 'is_published' column
@@ -93,7 +93,7 @@ class StateMachineBehavior extends Behavior
             $this->getTable()->addColumn(array(
                 'name'          => $this->getParameter('state_column'),
                 'type'          => 'INTEGER',
-				'defaultValue'	=> $defaultValue,
+                'defaultValue'  => $defaultValue,
             ));
         }
     }
@@ -122,22 +122,22 @@ class StateMachineBehavior extends Behavior
         return $this->queryBuilderModifier;
     }
 
-	public function getStates()
-	{
+    public function getStates()
+    {
         if (null === $this->states) {
-			$states = array();
-			foreach (explode(',', $this->getParameter('states')) as $state) {
+            $states = array();
+            foreach (explode(',', $this->getParameter('states')) as $state) {
                 $states[] = strtolower(trim($state));
-			}
+            }
 
-			sort($states, SORT_STRING);
-			$this->states = $states;
-		}
+            sort($states, SORT_STRING);
+            $this->states = $states;
+        }
 
-		return $this->states;
-	}
+        return $this->states;
+    }
 
-	public function getHumanizedStates()
+    public function getHumanizedStates()
     {
         if (null === $this->humanizedStates) {
             foreach ($this->getStates() as $state) {
@@ -145,8 +145,8 @@ class StateMachineBehavior extends Behavior
             }
         }
 
-		return $this->humanizedStates;
-	}
+        return $this->humanizedStates;
+    }
 
     public function getTransitions()
     {
@@ -163,20 +163,20 @@ class StateMachineBehavior extends Behavior
         }
 
         return $this->transitions;
-	}
+    }
 
     public function getSymbols()
     {
         if (null === $this->symbols) {
-			$symbols = array();
+            $symbols = array();
             foreach ($this->getTransitions() as $transition) {
-				$symbols[] = $transition['symbol'];
+                $symbols[] = $transition['symbol'];
             }
 
-			$symbols = array_unique($symbols);
-			sort($symbols, SORT_STRING);
-			$this->symbols = $symbols;
-		}
+            $symbols = array_unique($symbols);
+            sort($symbols, SORT_STRING);
+            $this->symbols = $symbols;
+        }
 
         return $this->symbols;
     }
@@ -211,14 +211,14 @@ class StateMachineBehavior extends Behavior
     }
 
     public function getExceptionClass()
-	{
-		return 'LogicException';
-	}
+    {
+        return 'LogicException';
+    }
 
-	public function getInitialState()
-	{
-		return strtolower($this->getParameter('initial_state'));
-	}
+    public function getInitialState()
+    {
+        return strtolower($this->getParameter('initial_state'));
+    }
 
     public function camelize($string)
     {
@@ -226,7 +226,7 @@ class StateMachineBehavior extends Behavior
     }
 
     public function humanize($string)
-	{
+    {
         return ucwords(str_replace('_', ' ', $string));
     }
 }
