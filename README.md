@@ -259,3 +259,11 @@ class PostController extends Controller
     }
 }
 ```
+
+
+### Know Limitations ###
+
+* You cannot use the `deleted` state;
+* You cannot use the `save`, or `delete` symbols.
+
+At the moment, there is no built-in solution to handle these cases.
