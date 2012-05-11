@@ -155,6 +155,26 @@ EOF;
             $this->assertTrue(true);
             $this->assertInstanceOf('LogicException', $e);
         }
+
+        try {
+            $post->publish();
+        } catch (Exception $e) {
+            $this->fail('Unexpected exception caught: ' . $e->getMessage());
+        }
+
+        $this->assertFalse($post->canPublish());
+        $this->assertTrue($post->canUnpublish());
+        $this->assertFalse($post->isDraft());
+        $this->assertTrue($post->isPublished());
+        $this->assertFalse($post->isUnpublished());
+
+        try {
+            $post->publish();
+            $this->fail('Expected exception not thrown') ;
+        } catch (Exception $e) {
+            $this->assertTrue(true);
+            $this->assertInstanceOf('LogicException', $e);
+        }
     }
 
     public function testGenerateGetStateIfCustomStateColumn()
