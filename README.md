@@ -1,6 +1,8 @@
 StateMachineBehavior
 ====================
 
+[![Build Status](https://secure.travis-ci.org/willdurand/StateMachineBehavior.png?branch=master)](http://travis-ci.org/willdurand/StateMachineBehavior)
+
 This behavior adds a finite state machine to your model.
 
 
