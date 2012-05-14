@@ -267,3 +267,45 @@ class PostController extends Controller
 * You cannot use the `save`, or `delete` symbols.
 
 At the moment, there is no built-in solution to handle these cases.
+
+
+### Combining Archivable Behavior
+
+The [Archivable](http://www.propelorm.org/behaviors/archivable.html) behavior is
+useful to copy a model object to an archivable table. In other words, it acts as
+a soft delete behavior but with better performances.
+
+In your workflow, you may want to destroy your object for some reasons. I say
+"destroy" because you can't use the `deleted` status, nor the `delete` symbol,
+but it doesn't matter. Destroying an object is fine, but instead of hard
+deleting it, you may want to soft delete it. That means you will rely on the
+archivable behavior.
+
+Just add it to your XML schema, rebuild both SQL, and model classes, and you're
+done. At first glance, when you will `destroy` your object, you will expect it
+to be hidden, but it's not the case. It just has the `destroyed` state.
+
+Thanks to hooks, you just have to call the `delete()` method to your object to
+fit your expectations. This method is tweaked by the archivable behavior to soft
+delete your object.
+
+``` php
+<?php
+
+class Post extends BasePost
+{
+    /**
+     * {@inheritdoc}
+     */
+    public function postDestroy(PropelPDO $con = null)
+    {
+        $this->delete($con);
+    }
+}
+```
+
+But, why should I put my logic in the post hook? The main reason is that a
+symbol method changes the state of the object, and then saves it. What you want
+is to archive the object at its last state.
+By putting the logic in the post hook, your object will have the `destroyed`
+state before to be archived, and you will archive the last state of your object.
