@@ -25,18 +25,18 @@ Feature: State Machine
             """
         And I want to manage a "TrafficLight"
         When I "prepare" it
-        Then I should get an "orange" state
+        Then I should get a "orange" state
         And I should be able to "start" it
         But I should not be able to "prepare" it again
         When I "start" it
-        Then I should get an "green" state
+        Then I should get a "green" state
         And I should be able to "prepare" it
         But I should not be able to "start" it again
         When I "prepare" it
-        Then I should get an "orange" state
+        Then I should get a "orange" state
         And I should be able to "stop" it
         But I should not be able to "prepare" it again
         When I "stop" it
-        Then I should get an "red" state
+        Then I should get a "red" state
         And I should be able to "prepare" it
         But I should not be able to "stop" it again

@@ -30,14 +30,14 @@ Feature: State Machine
         And Its default state is "draft"
 
         When I "publish" it
-        Then I should get an "published" state
+        Then I should get a "published" state
         And I should be able to "unpublish" it
         But I should not be able to "publish" it again
         And I should not be able to "reject" it
         And I should not be able to "destroy" it
 
         When I "unpublish" it
-        Then I should get an "unpublished" state
+        Then I should get a "unpublished" state
         And I should be able to "publish" it
         But I should not be able to "unpublish" it again
         And I should not be able to "reject" it
@@ -55,14 +55,14 @@ Feature: State Machine
         And I should not be able to "unpublish" it
 
         When I "publish" it
-        Then I should get an "published" state
+        Then I should get a "published" state
         And I should be able to "unpublish" it
         But I should not be able to "publish" it again
         And I should not be able to "reject" it
         And I should not be able to "destroy" it
 
         When I "unpublish" it
-        Then I should get an "unpublished" state
+        Then I should get a "unpublished" state
         And I should be able to "publish" it
         But I should not be able to "unpublish" it again
         And I should not be able to "reject" it
@@ -80,7 +80,7 @@ Feature: State Machine
         And I should not be able to "unpublish" it
 
         When I "destroy" it
-        Then I should get an "destroyed" state
+        Then I should get a "destroyed" state
         And I should not be able to "destroy" it again
         And I should not be able to "publish" it
         And I should not be able to "unpublish" it
