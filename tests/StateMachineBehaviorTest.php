@@ -96,8 +96,8 @@ EOF;
         $post = new Post();
         $expected = array(
             Post::STATE_DRAFT,
-            Post::STATE_PUBLISHED,
             Post::STATE_UNPUBLISHED,
+            Post::STATE_PUBLISHED,
         );
 
         $this->assertEquals($expected, $post->getAvailableStates());

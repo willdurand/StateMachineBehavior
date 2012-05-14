@@ -130,7 +130,6 @@ class StateMachineBehavior extends Behavior
                 $states[] = strtolower(trim($state));
             }
 
-            sort($states, SORT_STRING);
             $this->states = $states;
         }
 
@@ -222,7 +221,7 @@ class StateMachineBehavior extends Behavior
 
     public function camelize($string)
     {
-        return lcfirst(str_replace(' ', '', ucwords(strtr($string, '_-', '  '))));
+        return ucfirst(str_replace(' ', '', ucwords(strtr($string, '_-', '  '))));
     }
 
     public function humanize($string)
