@@ -206,8 +206,9 @@ $post->canPublish();            // false
 $post->canUnpublish();          // true
 ```
 
-Now imagine we have authors linked to each post, and once a post is published, we send us
-an email as a feedback. Thanks to new hooks, it's really easy to extend things:
+Now imagine we have authors linked to each post, and once a post is published,
+we notify the post's author by email. Thanks to new hooks, it's
+really easy to extend things:
 
 ``` php
 <?php
@@ -261,7 +262,7 @@ class PostController extends Controller
 ```
 
 
-### Know Limitations ###
+### Known Limitations ###
 
 * You cannot use the `deleted` state;
 * You cannot use the `save`, or `delete` symbols.
@@ -272,17 +273,17 @@ At the moment, there is no built-in solution to handle these cases.
 ### Combining Archivable Behavior
 
 The [Archivable](http://www.propelorm.org/behaviors/archivable.html) behavior is
-useful to copy a model object to an archivable table. In other words, it acts as
-a soft delete behavior but with better performances.
+useful to copy a model object to an archival table. In other words, it acts as
+a soft delete behavior but with better performance.
 
-In your workflow, you may want to destroy your object for some reasons. I say
+In your workflow, you may want to destroy your object for some reason. I say
 "destroy" because you can't use the `deleted` status, nor the `delete` symbol,
 but it doesn't matter. Destroying an object is fine, but instead of hard
 deleting it, you may want to soft delete it. That means you will rely on the
 archivable behavior.
 
 Just add it to your XML schema, rebuild both SQL, and model classes, and you're
-done. At first glance, when you will `destroy` your object, you will expect it
+done. At first glance, when you `destroy` your object, you will expect it
 to be hidden, but it's not the case. It just has the `destroyed` state.
 
 Thanks to hooks, you just have to call the `delete()` method to your object to
