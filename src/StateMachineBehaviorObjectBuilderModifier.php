@@ -25,6 +25,8 @@ class StateMachineBehaviorObjectBuilderModifier
 
     public function objectMethods($builder)
     {
+        $builder->declareClass($this->behavior->getExceptionClass());
+
         $script  = '';
         if (StateMachineBehavior::DEFAULT_STATE_COLUMN !== $this->behavior->getParameter('state_column')) {
             $script .= $this->addGetState($builder);
