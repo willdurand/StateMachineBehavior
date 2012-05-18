@@ -286,27 +286,5 @@ Just add it to your XML schema, rebuild both SQL, and model classes, and you're
 done. At first glance, when you `destroy` your object, you will expect it
 to be hidden, but it's not the case. It just has the `destroyed` state.
 
-Thanks to hooks, you just have to call the `delete()` method to your object to
-fit your expectations. This method is tweaked by the archivable behavior to soft
-delete your object.
-
-``` php
-<?php
-
-class Post extends BasePost
-{
-    /**
-     * {@inheritdoc}
-     */
-    public function postDestroy(PropelPDO $con = null)
-    {
-        $this->delete($con);
-    }
-}
-```
-
-But, why should I put my logic in the post hook? The main reason is that a
-symbol method changes the state of the object, and then saves it. What you want
-is to archive the object at its last state.
-By putting the logic in the post hook, your object will have the `destroyed`
-state before to be archived, and you will archive the last state of your object.
+Just call the `delete()` termination method as usual, and your object will be
+automatically archived. No much to do.
