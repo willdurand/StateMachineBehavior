@@ -14,10 +14,7 @@ public function <?php echo $methodName ?>(PropelPDO $con = null)
         $this-><?php echo $onHookMethodName ?>($con);
 
         $this-><?php echo $stateColumnSetter ?>(self::<?php echo $stateConstant ?>);
-        $this->save($con);
-
-        $this-><?php echo $postHookMethodName ?>($con);
     }
 
-    return false;
+    return $this;
 }

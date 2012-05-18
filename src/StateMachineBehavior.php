@@ -209,6 +209,18 @@ class StateMachineBehavior extends Behavior
         return current($states);
     }
 
+    public function getSymbolForState($state)
+    {
+        $transitions = array_filter($this->getTransitions(), function ($transition) use ($state) {
+            return $state === $transition['to'];
+        });
+        $symbols = array_map(function ($transition) {
+            return $transition['symbol'];
+        }, $transitions);
+
+        return current($symbols) ?: null;
+    }
+
     public function getExceptionClass()
     {
         return 'LogicException';

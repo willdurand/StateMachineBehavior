@@ -170,7 +170,7 @@ $post->unpublish();             // throw a LogicException, no transition found f
 
 // Let's publish this post
 // This is the first transition in the scenario above
-$post->publish();
+$post->publish()->save();
 
 $post->isDraft();               // false
 $post->isPublished();           // true
@@ -183,7 +183,7 @@ $post->publish();               // throw a LogicException, the post is already p
 
 // Let's unpublish this post
 // This is the second transition in the scenario above
-$post->unpublish();
+$post->unpublish()->save();
 
 $post->isDraft();               // false
 $post->isPublished();           // false
@@ -196,7 +196,7 @@ $post->unpublish();             // throw a LogicException, the post is already u
 
 // Let's (re)publish this post
 // This is the last transition in the scenario above
-$post->publish();
+$post->publish()->save();
 
 $post->isDraft();               // false
 $post->isPublished();           // true
@@ -244,7 +244,7 @@ class PostController extends Controller
     public function publishAction(Post $post)
     {
         try {
-            $post->publish();
+            $post->publish()->save();
         } catch (\LogicException $e) {
             // handle the exception as you wish
         }
@@ -253,7 +253,7 @@ class PostController extends Controller
     public function unpublishAction(Post $post)
     {
         try {
-            $post->unpublish();
+            $post->unpublish()->save();
         } catch (\LogicException $e) {
             // handle the exception as you wish
         }

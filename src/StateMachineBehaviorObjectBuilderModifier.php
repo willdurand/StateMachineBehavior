@@ -23,6 +23,11 @@ class StateMachineBehaviorObjectBuilderModifier
         ));
     }
 
+    public function postSave($builder)
+    {
+        return $this->addPostHooks($builder);
+    }
+
     public function objectMethods($builder)
     {
         $builder->declareClass($this->behavior->getExceptionClass());
@@ -125,6 +130,21 @@ class StateMachineBehaviorObjectBuilderModifier
         }
 
         return $script;
+    }
+
+    public function addPostHooks($builder)
+    {
+        $states = array();
+        foreach ($this->behavior->getStates() as $state) {
+            if (null !== $symbol = $this->behavior->getSymbolForState($state)) {
+                $states[$this->getStateConstant($state)] = $this->getSymbolPostHook($symbol);
+            }
+        }
+
+        return $this->behavior->renderTemplate('objectPostHooks', array(
+            'stateColumnGetter'     => $this->getColumnGetter('state_column'),
+            'states'                => $states,
+        ));
     }
 
     protected function getColumnSetter($columnName)
