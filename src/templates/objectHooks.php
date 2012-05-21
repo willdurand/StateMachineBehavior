@@ -3,7 +3,7 @@
 /**
  *
  */
-public function pre<?php echo ucfirst($symbol) ?>(PropelPDO $con = null)
+public function <?php echo $symbol['pre'] ?>(PropelPDO $con = null)
 {
     return true;
 }
@@ -11,14 +11,14 @@ public function pre<?php echo ucfirst($symbol) ?>(PropelPDO $con = null)
 /**
  *
  */
-public function on<?php echo ucfirst($symbol) ?>(PropelPDO $con = null)
+public function <?php echo $symbol['on'] ?>(PropelPDO $con = null)
 {
 }
 
 /**
  *
  */
-public function post<?php echo ucfirst($symbol) ?>(PropelPDO $con = null)
+public function <?php echo $symbol['post'] ?>(PropelPDO $con = null)
 {
 }
 

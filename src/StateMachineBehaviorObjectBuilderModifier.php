@@ -71,8 +71,17 @@ class StateMachineBehaviorObjectBuilderModifier
 
     public function addHooks($builder)
     {
+        $symbols = array();
+        foreach ($this->behavior->getSymbols() as $symbol) {
+            $symbols[] = array(
+                'pre'   => $this->getSymbolPreHook($symbol),
+                'on'    => $this->getSymbolOnHook($symbol),
+                'post'  => $this->getSymbolPostHook($symbol),
+            );
+        }
+
         return $this->behavior->renderTemplate('objectHooks', array(
-            'symbols'           => $this->behavior->getSymbols(),
+            'symbols'   => $symbols,
         ));
     }
 
