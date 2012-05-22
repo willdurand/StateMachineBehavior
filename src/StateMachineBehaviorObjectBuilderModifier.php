@@ -63,8 +63,13 @@ class StateMachineBehaviorObjectBuilderModifier
 
     public function addGetHumanizedState($builder)
     {
+        $array = array();
+        foreach ($this->behavior->getHumanizedStates() as $state => $humanizedState) {
+            $array[$this->getStateConstant($state)] = $humanizedState;
+        }
+
         return $this->behavior->renderTemplate('objectHumanizedState', array(
-            'humanizedStates'   => $this->behavior->getHumanizedStates(),
+            'humanizedStates'   => $array,
             'stateColumnGetter' => $this->getColumnGetter('state_column'),
         ));
     }

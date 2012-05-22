@@ -55,6 +55,19 @@ Or get an array with all available states:
 
     getAvailableStates()
 
+Most of the time, you would like to display these states. Thanks to two
+convenient methods, it's really easy:
+
+    getHumanizedState() // 'Draft', or 'Rejected', or 'Unpublished', or 'Published'
+
+    ObjectModel::getHumanizedStates()
+    // array(
+    //  0 => 'Draft',
+    //  1 => 'Rejected',
+    //  2 => 'Unpublished',
+    //  3 => 'Published',
+    // )
+
 The behavior will also generate a set of issers:
 
     isDraft()

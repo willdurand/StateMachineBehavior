@@ -73,6 +73,7 @@ EOF;
         $this->assertTrue(method_exists('Post', 'getAvailableStates'));
         $this->assertTrue(method_exists('Post', 'getState'));
         $this->assertTrue(method_exists('Post', 'getHumanizedState'));
+        $this->assertTrue(method_exists('Post', 'getHumanizedStates'));
 
         $this->assertTrue(defined('Post::STATE_DRAFT'));
         $this->assertTrue(defined('Post::STATE_PUBLISHED'));
@@ -214,5 +215,24 @@ EOF;
         $prop->setValue($post, PostWithCustomColumn::STATE_NOT_YET_PUBLISHED);
 
         $this->assertEquals('Not Yet Published', $post->getHumanizedState());
+    }
+
+    public function testGetAvailableStatesStatic()
+    {
+        $post = new Post();
+
+        $this->assertEquals($post->getAvailableStates(), Post::getAvailableStates());
+    }
+
+    public function testGetHumanizedStates()
+    {
+        $expected = array(
+            Post::STATE_DRAFT       => 'Draft',
+            Post::STATE_UNPUBLISHED => 'Unpublished',
+            Post::STATE_PUBLISHED   => 'Published',
+        );
+
+        $this->assertTrue(is_array(Post::getHumanizedStates()));
+        $this->assertEquals($expected, Post::getHumanizedStates());
     }
 }

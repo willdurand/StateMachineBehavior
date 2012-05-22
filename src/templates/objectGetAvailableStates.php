@@ -2,7 +2,7 @@
 /**
  * @return array
  */
-public function getAvailableStates()
+public static function getAvailableStates()
 {
     return array(
 <?php foreach ($states as $state) : ?>
