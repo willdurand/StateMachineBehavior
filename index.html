@@ -1,0 +1,361 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <title>Statemachinebehavior by willdurand</title>
+
+    <link rel="stylesheet" href="stylesheets/styles.css">
+    <link rel="stylesheet" href="stylesheets/pygment_trac.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="wrapper">
+      <header>
+        <h1>Statemachinebehavior</h1>
+        <p>This behavior adds a finite state machine to your model.</p>
+        <p class="view"><a href="https://github.com/willdurand/StateMachineBehavior">View the Project on GitHub <small>willdurand/StateMachineBehavior</small></a></p>
+        <ul>
+          <li><a href="https://github.com/willdurand/StateMachineBehavior/zipball/master">Download <strong>ZIP File</strong></a></li>
+          <li><a href="https://github.com/willdurand/StateMachineBehavior/tarball/master">Download <strong>TAR Ball</strong></a></li>
+          <li><a href="https://github.com/willdurand/StateMachineBehavior">View On <strong>GitHub</strong></a></li>
+        </ul>
+      </header>
+      <section>
+        <h1>StateMachineBehavior</h1>
+
+<p><a href="http://travis-ci.org/willdurand/StateMachineBehavior"><img src="https://secure.travis-ci.org/willdurand/StateMachineBehavior.png?branch=master" alt="Build Status"></a></p>
+
+<p>This behavior adds a finite state machine to your model.</p>
+
+<h3>Configuration</h3>
+
+<div class="highlight">
+<pre><span class="nt">&lt;behavior</span> <span class="na">name=</span><span class="s">"state_machine"</span><span class="nt">&gt;</span>
+    <span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">"states"</span> <span class="na">value=</span><span class="s">"draft, rejected, unpublished, published"</span> <span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">"initial_state"</span> <span class="na">value=</span><span class="s">"draft"</span> <span class="nt">/&gt;</span>
+
+    <span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">"transition"</span> <span class="na">value=</span><span class="s">"draft to published with publish"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">"transition"</span> <span class="na">value=</span><span class="s">"draft to rejected with reject"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">"transition"</span> <span class="na">value=</span><span class="s">"published to unpublished with unpublish"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">"transition"</span> <span class="na">value=</span><span class="s">"unpublished to published with publish"</span> <span class="nt">/&gt;</span>
+
+    <span class="c">&lt;!-- Optional parameters --&gt;</span>
+    <span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">"state_column"</span> <span class="na">name=</span><span class="s">"state"</span> <span class="nt">/&gt;</span>
+<span class="nt">&lt;/behavior&gt;</span>
+</pre>
+</div>
+
+
+<p>The <strong>state_machine</strong> behavior requires three parameters to work:</p>
+
+<ul>
+<li>
+<code>states</code>: a finite set of states as comma separated values;</li>
+<li>
+<code>initial_state</code>: the initial state, part of set of states;</li>
+<li>
+<code>transition</code>: a set of transitions. As you can see, you can add as many <code>transition</code> parameters as you want.</li>
+</ul><p>Each transition has to follow this pattern:</p>
+
+<pre><code>STATE_1 to STATE_2 with SYMBOL
+</code></pre>
+
+<p>A <code>symbol</code>, which is part of the Finite State Machine's terminology, can be considered as an event triggered
+on your model object.</p>
+
+<h3> ActiveRecord API</h3>
+
+<p>The behavior will generate the following constants which represent the available states of your object:</p>
+
+<ul>
+<li><code>ObjectModel::STATE_DRAFT</code></li>
+<li><code>ObjectModel::STATE_REJECTED</code></li>
+<li><code>ObjectModel::STATE_UNPUBLISHED</code></li>
+<li><code>ObjectModel::STATE_PUBLISHED</code></li>
+</ul><p>You can get the current state of your object:</p>
+
+<pre><code>getState()
+</code></pre>
+
+<p>Or get an array with all available states:</p>
+
+<pre><code>getAvailableStates()
+</code></pre>
+
+<p>Most of the time, you would like to display these states. Thanks to two
+convenient methods, it's really easy:</p>
+
+<pre><code>getHumanizedState() // 'Draft', or 'Rejected', or 'Unpublished', or 'Published'
+
+ObjectModel::getHumanizedStates()
+// array(
+//  0 =&gt; 'Draft',
+//  1 =&gt; 'Rejected',
+//  2 =&gt; 'Unpublished',
+//  3 =&gt; 'Published',
+// )
+</code></pre>
+
+<p>The behavior will also generate a set of issers:</p>
+
+<pre><code>isDraft()
+
+isRejected()
+
+isPublished()
+
+isUnpublished()
+</code></pre>
+
+<p>But the most interesting part is the implemenation of the FSM itself.
+First you have methods to determine whether you can perform, or not a transition based
+on the current model's state:</p>
+
+<pre><code>canPublish()
+
+canReject()
+
+canUnpublish()
+</code></pre>
+
+<p>It will also generate a set of methods for each <code>symbol</code>:</p>
+
+<pre><code>publish(PropelPDO $con = null)
+
+unpublish(PropelPDO $con = null)
+
+reject(PropelPDO $con = null)
+</code></pre>
+
+<p>To handle custom logic, new hooks are created.
+The methods below should return a boolean value, and can act as <strong>guards</strong> (which is not part
+of the FSM's terminology).</p>
+
+<pre><code>prePublish(PropelPDO $con = null)
+
+preUnpublish(PropelPDO $con = null)
+
+preReject(PropelPDO $con = null)
+</code></pre>
+
+<p>The methods below should contain your own logic depending on each state, and your business.</p>
+
+<pre><code>onPublish(PropelPDO $con = null)
+
+onUnpublish(PropelPDO $con = null)
+
+onReject(PropelPDO $con = null)
+</code></pre>
+
+<p>The methods below allow to execute code once the transition is executed.</p>
+
+<pre><code>postPublish(PropelPDO $con = null)
+
+postUnpublish(PropelPDO $con = null)
+
+postReject(PropelPDO $con = null)
+</code></pre>
+
+<h3>ActiveQuery API</h3>
+
+<p>To be defined.</p>
+
+<h3>Usage</h3>
+
+<p>Let's say we have a <code>Post</code> model class which represents an entry in a blog engine.
+When we create a new post, its initial state is <code>draft</code> because we don't want to publish
+it immediately.
+As a <code>draft</code>, you can decide to publish your new post. Its state is now <code>published</code>.
+Once <code>published</code>, you may want to unpublish it for some reasons. Then, its state is <code>unpublished</code>.
+The last possibily is to republish an <code>unpublished</code> post. The new state is <code>published</code>.</p>
+
+<p>We have three different states (<code>draft</code>, <code>published</code>, <code>unpublished</code>), and three transitions:</p>
+
+<ul>
+<li>
+<code>draft</code> to <code>published</code>
+</li>
+<li>
+<code>published</code> to <code>unpublished</code>
+</li>
+<li>
+<code>unpublished</code> to <code>published</code>
+</li>
+</ul><p>We can define the following configuration:</p>
+
+<div class="highlight">
+<pre><span class="nt">&lt;table</span> <span class="na">name=</span><span class="s">"post"</span><span class="nt">&gt;</span>
+    <span class="c">&lt;!-- some columns --&gt;</span>
+
+    <span class="nt">&lt;behavior</span> <span class="na">name=</span><span class="s">"state_machine"</span><span class="nt">&gt;</span>
+        <span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">"states"</span> <span class="na">value=</span><span class="s">"draft, unpublished, published"</span> <span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">"initial_state"</span> <span class="na">value=</span><span class="s">"draft"</span> <span class="nt">/&gt;</span>
+
+        <span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">"transition"</span> <span class="na">value=</span><span class="s">"draft to published with publish"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">"transition"</span> <span class="na">value=</span><span class="s">"published to unpublished with unpublish"</span> <span class="nt">/&gt;</span>
+        <span class="nt">&lt;parameter</span> <span class="na">name=</span><span class="s">"transition"</span> <span class="na">value=</span><span class="s">"unpublished to published with publish"</span> <span class="nt">/&gt;</span>
+    <span class="nt">&lt;/behavior&gt;</span>
+<span class="nt">&lt;/table&gt;</span>
+</pre>
+</div>
+
+
+<p>Here is a workflow:</p>
+
+<div class="highlight">
+<pre><span class="cp">&lt;?php</span>
+
+<span class="nv">$post</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Post</span><span class="p">();</span>
+
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">getState</span><span class="p">();</span>              <span class="c1">// Post::STATE_DRAFT</span>
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">getAvailableStates</span><span class="p">();</span>    <span class="c1">// Post::STATE_DRAFT, Post::STATE_UNPUBLISHED, Post::STATE_PUBLISHED</span>
+
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">isDraft</span><span class="p">();</span>               <span class="c1">// true</span>
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">isPublished</span><span class="p">();</span>           <span class="c1">// false</span>
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">isUnpublished</span><span class="p">();</span>         <span class="c1">// false</span>
+
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">canPublish</span><span class="p">();</span>            <span class="c1">// true</span>
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">canUnpublish</span><span class="p">();</span>          <span class="c1">// false</span>
+
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">unpublish</span><span class="p">();</span>             <span class="c1">// throw a LogicException, no transition found from draft to unpublished</span>
+
+<span class="c1">// Let's publish this post</span>
+<span class="c1">// This is the first transition in the scenario above</span>
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">publish</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">();</span>
+
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">isDraft</span><span class="p">();</span>               <span class="c1">// false</span>
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">isPublished</span><span class="p">();</span>           <span class="c1">// true</span>
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">isUnpublished</span><span class="p">();</span>         <span class="c1">// false</span>
+
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">canPublish</span><span class="p">();</span>            <span class="c1">// false</span>
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">canUnpublish</span><span class="p">();</span>          <span class="c1">// true</span>
+
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">publish</span><span class="p">();</span>               <span class="c1">// throw a LogicException, the post is already published</span>
+
+<span class="c1">// Let's unpublish this post</span>
+<span class="c1">// This is the second transition in the scenario above</span>
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">unpublish</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">();</span>
+
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">isDraft</span><span class="p">();</span>               <span class="c1">// false</span>
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">isPublished</span><span class="p">();</span>           <span class="c1">// false</span>
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">isUnpublished</span><span class="p">();</span>         <span class="c1">// true</span>
+
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">canPublish</span><span class="p">();</span>            <span class="c1">// true</span>
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">canUnpublish</span><span class="p">();</span>          <span class="c1">// false</span>
+
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">unpublish</span><span class="p">();</span>             <span class="c1">// throw a LogicException, the post is already unpublished</span>
+
+<span class="c1">// Let's (re)publish this post</span>
+<span class="c1">// This is the last transition in the scenario above</span>
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">publish</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">();</span>
+
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">isDraft</span><span class="p">();</span>               <span class="c1">// false</span>
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">isPublished</span><span class="p">();</span>           <span class="c1">// true</span>
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">isUnpublished</span><span class="p">();</span>         <span class="c1">// false</span>
+
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">canPublish</span><span class="p">();</span>            <span class="c1">// false</span>
+<span class="nv">$post</span><span class="o">-&gt;</span><span class="na">canUnpublish</span><span class="p">();</span>          <span class="c1">// true</span>
+</pre>
+</div>
+
+
+<p>Now imagine we have authors linked to each post, and once a post is published,
+we notify the post's author by email. Thanks to new hooks, it's
+really easy to extend things:</p>
+
+<div class="highlight">
+<pre><span class="cp">&lt;?php</span>
+
+<span class="k">class</span> <span class="nc">Post</span> <span class="k">extends</span> <span class="nx">BasePost</span>
+<span class="p">{</span>
+    <span class="c1">// Assuming we have a mail manager which is able to send emails,</span>
+    <span class="c1">// and that we injected it before.</span>
+    <span class="k">private</span> <span class="nv">$mailManager</span><span class="p">;</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">onPublish</span><span class="p">(</span><span class="nx">PropelPDO</span> <span class="nv">$con</span> <span class="o">=</span> <span class="k">null</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">mailManager</span><span class="o">-&gt;</span><span class="na">postPublished</span><span class="p">(</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getAuthor</span><span class="p">(),</span>
+            <span class="nv">$this</span><span class="o">-&gt;</span><span class="na">getTitle</span><span class="p">()</span>
+        <span class="p">);</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+</div>
+
+
+<p>Use case in a controller:</p>
+
+<div class="highlight">
+<pre><span class="cp">&lt;?php</span>
+
+<span class="k">class</span> <span class="nc">PostController</span> <span class="k">extends</span> <span class="nx">Controller</span>
+<span class="p">{</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">newAction</span><span class="p">()</span>
+    <span class="p">{</span>
+        <span class="c1">// handle a form, etc to create a new Post</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">publishAction</span><span class="p">(</span><span class="nx">Post</span> <span class="nv">$post</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">try</span> <span class="p">{</span>
+            <span class="nv">$post</span><span class="o">-&gt;</span><span class="na">publish</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">();</span>
+        <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">\LogicException</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// handle the exception as you wish</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">unpublishAction</span><span class="p">(</span><span class="nx">Post</span> <span class="nv">$post</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="k">try</span> <span class="p">{</span>
+            <span class="nv">$post</span><span class="o">-&gt;</span><span class="na">unpublish</span><span class="p">()</span><span class="o">-&gt;</span><span class="na">save</span><span class="p">();</span>
+        <span class="p">}</span> <span class="k">catch</span> <span class="p">(</span><span class="nx">\LogicException</span> <span class="nv">$e</span><span class="p">)</span> <span class="p">{</span>
+            <span class="c1">// handle the exception as you wish</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre>
+</div>
+
+
+<h3>Known Limitations</h3>
+
+<ul>
+<li>You cannot use the <code>deleted</code> state;</li>
+<li>You cannot use the <code>save</code>, or <code>delete</code> symbols.</li>
+</ul><p>At the moment, there is no built-in solution to handle these cases.</p>
+
+<h3>Combining Archivable Behavior</h3>
+
+<p>The <a href="http://www.propelorm.org/behaviors/archivable.html">Archivable</a> behavior is
+useful to copy a model object to an archival table. In other words, it acts as
+a soft delete behavior but with better performance.</p>
+
+<p>In your workflow, you may want to destroy your object for some reason. I say
+"destroy" because you can't use the <code>deleted</code> status, nor the <code>delete</code> symbol,
+but it doesn't matter. Destroying an object is fine, but instead of hard
+deleting it, you may want to soft delete it. That means you will rely on the
+archivable behavior.</p>
+
+<p>Just add it to your XML schema, rebuild both SQL, and model classes, and you're
+done. At first glance, when you <code>destroy</code> your object, you will expect it
+to be hidden, but it's not the case. It just has the <code>destroyed</code> state.</p>
+
+<p>Just call the <code>delete()</code> termination method as usual, and your object will be
+automatically archived. No much to do.</p>
+      </section>
+      <footer>
+        <p>This project is maintained by <a href="https://github.com/willdurand">willdurand</a></p>
+        <p><small>Hosted on GitHub Pages &mdash; Theme by <a href="https://github.com/orderedlist">orderedlist</a></small></p>
+      </footer>
+    </div>
+    <script src="javascripts/scale.fix.js"></script>
+    
+  </body>
+</html>
