@@ -1,6 +1,6 @@
 {
     "name": "willdurand/propel-statemachine-behavior",
-    "description": "",
+    "description": "Adds a finite state machine to your model.",
     "keywords": [ "propel", "behavior", "state machine" ],
     "authors": [
         {
