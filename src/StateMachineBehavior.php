@@ -18,6 +18,7 @@ class StateMachineBehavior extends Behavior
         'initial_state'  => null,
         'transition'     => array(),
         'state_column'   => self::DEFAULT_STATE_COLUMN,
+        'with_description' => 'false',
     );
 
     /**
@@ -90,12 +91,35 @@ class StateMachineBehavior extends Behavior
 
         // add the 'is_published' column
         if (!$this->getTable()->containsColumn($this->getParameter('state_column'))) {
-            $this->getTable()->addColumn(array(
+            $column = array(
                 'name'          => $this->getParameter('state_column'),
                 'type'          => 'INTEGER',
                 'defaultValue'  => $defaultValue,
-            ));
+            );
+
+            if ('true' === $this->getParameter('with_description')) {
+                $column['description'] = $this->generateStateColumnComment();
+            }
+
+            $this->getTable()->addColumn($column);
         }
+    }
+
+    /**
+     * Generate a column comment containing a value-to-state map.
+     *
+     * @return string
+     */
+    protected function generateStateColumnComment()
+    {
+        $comment = '';
+
+        $states = $this->getStates();
+        foreach ($states as $colValue => $eachState) {
+            $comment .= sprintf("%d: %s\n", $colValue, $this->humanize($eachState));
+        }
+
+        return $comment;
     }
 
     /**
