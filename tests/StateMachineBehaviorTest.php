@@ -27,13 +27,15 @@ class StateMachineBehaviorTest extends \PHPUnit_Framework_TestCase
         <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER" />
 
         <behavior name="state_machine">
-            <parameter name="states" value="draft, published, not_yet_published" />
+            <parameter name="states" value="draft, published, not_yet_published, flagged" />
 
             <parameter name="initial_state" value="draft" />
 
             <parameter name="transition" value="draft to published with publish" />
             <parameter name="transition" value="published to not_yet_published with unpublish" />
             <parameter name="transition" value="not_yet_published to published with publish" />
+            <parameter name="transition" value="not_yet_published to flagged with flag_for_publish" />
+            <parameter name="transition" value="flagged to published with publish" />
 
             <parameter name="state_column" value="my_state" />
         </behavior>
@@ -183,6 +185,7 @@ EOF;
         $this->assertTrue(method_exists('PostWithCustomColumn', 'getState'));
         $this->assertTrue(method_exists('PostWithCustomColumn', 'getMyState'));
         $this->assertTrue(method_exists('PostWithCustomColumn', 'isNotYetPublished'));
+        $this->assertTrue(method_exists('PostWithCustomColumn', 'flagForPublish'));
 
         $this->assertTrue(defined('PostWithCustomColumn::STATE_NOT_YET_PUBLISHED'));
     }
