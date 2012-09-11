@@ -130,7 +130,7 @@ class StateMachineBehaviorObjectBuilderModifier
         $script = '';
         foreach ($this->behavior->getSymbols() as $symbol) {
             $script .= $this->behavior->renderTemplate('objectSymbolMethod', array(
-                'methodName'            => $symbol,
+                'methodName'            => lcfirst($this->behavior->camelize($symbol)),
                 'canMethodName'         => $this->getSymbolCanner($symbol),
                 'exceptionClass'        => $this->behavior->getExceptionClass(),
                 'modelName'             => $this->getModelName($builder),
