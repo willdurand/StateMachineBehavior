@@ -27,14 +27,14 @@ class StateMachineBehaviorTest extends \PHPUnit_Framework_TestCase
         <column name="id" required="true" primaryKey="true" autoIncrement="true" type="INTEGER" />
 
         <behavior name="state_machine">
-            <parameter name="states" value="draft, published, not_yet_published, flagged" />
+            <parameter name="states" value="draft, published, not_yEt_published, flagged" />
 
             <parameter name="initial_state" value="draft" />
 
             <parameter name="transition" value="draft to published with publish" />
             <parameter name="transition" value="published to not_yet_published with unpublish" />
-            <parameter name="transition" value="not_yet_published to published with publish" />
-            <parameter name="transition" value="not_yet_published to flagged with flag_for_publish" />
+            <parameter name="transition" value="not_yEt_published to published with publish" />
+            <parameter name="transition" value="not_yEt_published to flagged with flag_for_publish" />
             <parameter name="transition" value="flagged to published with publish" />
 
             <parameter name="state_column" value="my_state" />
@@ -80,6 +80,9 @@ EOF;
         $this->assertTrue(defined('Post::STATE_DRAFT'));
         $this->assertTrue(defined('Post::STATE_PUBLISHED'));
         $this->assertTrue(defined('Post::STATE_UNPUBLISHED'));
+
+        $this->assertTrue(defined('Post::STATE_NORMALIZED_DRAFT'));
+        $this->assertEquals('draft', Post::STATE_NORMALIZED_DRAFT);
     }
 
     public function testInitialState()
@@ -92,6 +95,12 @@ EOF;
     {
         $post = new Post();
         $this->assertEquals(Post::STATE_DRAFT, $post->getState());
+    }
+
+    public function testGetNormalizedState()
+    {
+        $post = new Post();
+        $this->assertEquals(Post::STATE_NORMALIZED_DRAFT, $post->getNormalizedState());
     }
 
     public function testGetAvailableStates()
@@ -188,6 +197,8 @@ EOF;
         $this->assertTrue(method_exists('PostWithCustomColumn', 'flagForPublish'));
 
         $this->assertTrue(defined('PostWithCustomColumn::STATE_NOT_YET_PUBLISHED'));
+        $this->assertTrue(defined('PostWithCustomColumn::STATE_NORMALIZED_NOT_YET_PUBLISHED'));
+        $this->assertEquals('not_yet_published', PostWithCustomColumn::STATE_NORMALIZED_NOT_YET_PUBLISHED);
     }
 
     public function testIssersDefaultValuesWithCustomStateColumn()
