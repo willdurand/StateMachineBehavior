@@ -39,7 +39,7 @@ class StateMachineBehaviorObjectBuilderModifier
 
         $script .= $this->addGetAvailableStates($builder);
         $script .= $this->addGetHumanizedState($builder);
-        $script .= $this->addGetNamedState($builder);
+        $script .= $this->addGetNormalizedState($builder);
         $script .= $this->addHooks($builder);
         $script .= $this->addIssers($builder);
         $script .= $this->addCanners($builder);
@@ -75,14 +75,14 @@ class StateMachineBehaviorObjectBuilderModifier
         ));
     }
 
-    public function addGetNamedState($builder)
+    public function addGetNormalizedState($builder)
     {
         $map = array();
         foreach ($this->behavior->getStates() as $state) {
-            $map[$this->getStateConstant($state)] = $this->getStateNameConstant($state);
+            $map[$this->getStateConstant($state)] = $this->getStateNormalizedConstant($state);
         }
 
-        return $this->behavior->renderTemplate('objectGetNamedState', array(
+        return $this->behavior->renderTemplate('objectGetNormalizedState', array(
             'states'   => $map,
         ));
     }
@@ -214,9 +214,9 @@ class StateMachineBehaviorObjectBuilderModifier
         return 'STATE_' . strtoupper($state);
     }
 
-    protected function getStateNameConstant($state)
+    protected function getStateNormalizedConstant($state)
     {
-        return 'STATE_NAME_' . strtoupper($state);
+        return 'STATE_NORMALIZED_' . strtoupper($state);
     }
 
     protected function getModelName($builder)

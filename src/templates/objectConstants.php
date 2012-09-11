@@ -11,6 +11,6 @@ const STATE_<?php echo strtoupper($state) ?> = <?php echo $i ?>;
  *
  * @var string
  */
-const STATE_NAME_<?php echo strtoupper($state) ?> = "<?php echo $state ?>";
+const STATE_NORMALIZED_<?php echo strtoupper($state) ?> = "<?php echo $state ?>";
 
 <?php endforeach; ?>

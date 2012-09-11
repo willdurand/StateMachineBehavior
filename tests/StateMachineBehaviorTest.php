@@ -81,8 +81,8 @@ EOF;
         $this->assertTrue(defined('Post::STATE_PUBLISHED'));
         $this->assertTrue(defined('Post::STATE_UNPUBLISHED'));
 
-        $this->assertTrue(defined('Post::STATE_NAME_DRAFT'));
-        $this->assertEquals('draft', Post::STATE_NAME_DRAFT);
+        $this->assertTrue(defined('Post::STATE_NORMALIZED_DRAFT'));
+        $this->assertEquals('draft', Post::STATE_NORMALIZED_DRAFT);
     }
 
     public function testInitialState()
@@ -97,10 +97,10 @@ EOF;
         $this->assertEquals(Post::STATE_DRAFT, $post->getState());
     }
 
-    public function testGetNamedState()
+    public function testGetNormalizedState()
     {
         $post = new Post();
-        $this->assertEquals(Post::STATE_NAME_DRAFT, $post->getNamedState());
+        $this->assertEquals(Post::STATE_NORMALIZED_DRAFT, $post->getNormalizedState());
     }
 
     public function testGetAvailableStates()
@@ -197,8 +197,8 @@ EOF;
         $this->assertTrue(method_exists('PostWithCustomColumn', 'flagForPublish'));
 
         $this->assertTrue(defined('PostWithCustomColumn::STATE_NOT_YET_PUBLISHED'));
-        $this->assertTrue(defined('PostWithCustomColumn::STATE_NAME_NOT_YET_PUBLISHED'));
-        $this->assertEquals('not_yet_published', PostWithCustomColumn::STATE_NAME_NOT_YET_PUBLISHED);
+        $this->assertTrue(defined('PostWithCustomColumn::STATE_NORMALIZED_NOT_YET_PUBLISHED'));
+        $this->assertEquals('not_yet_published', PostWithCustomColumn::STATE_NORMALIZED_NOT_YET_PUBLISHED);
     }
 
     public function testIssersDefaultValuesWithCustomStateColumn()

@@ -2,7 +2,7 @@
 /**
  * @return string|null
  */
-public function getNamedState()
+public function getNormalizedState()
 {
     switch ($this->getState()) {
 <?php foreach ($states as $state => $name) : ?>
