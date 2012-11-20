@@ -103,6 +103,18 @@ EOF;
         $this->assertEquals(Post::STATE_NORMALIZED_DRAFT, $post->getNormalizedState());
     }
 
+    public function testGetNormalizedStates()
+    {
+        $expected = array(
+            Post::STATE_NORMALIZED_DRAFT,
+            Post::STATE_NORMALIZED_UNPUBLISHED,
+            Post::STATE_NORMALIZED_PUBLISHED,
+        );
+
+        $this->assertCount(3, Post::getNormalizedStates());
+        $this->assertEquals($expected, Post::getNormalizedStates());
+    }
+
     public function testGetAvailableStates()
     {
         $post = new Post();

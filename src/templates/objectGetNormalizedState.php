@@ -15,3 +15,15 @@ public function getNormalizedState()
 
     return null;
 }
+
+/**
+ * @return array
+ */
+public static function getNormalizedStates()
+{
+    return array(
+<?php foreach ($states as $state => $name) : ?>
+        self::<?php echo $name ?>,
+<?php endforeach; ?>
+    );
+}
