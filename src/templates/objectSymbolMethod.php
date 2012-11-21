@@ -13,7 +13,7 @@ public function <?php echo $methodName ?>(PropelPDO $con = null)
     if ($this-><?php echo $preHookMethodName ?>($con)) {
         $this-><?php echo $onHookMethodName ?>($con);
 
-        $this-><?php echo $stateColumnSetter ?>(self::<?php echo $stateConstant ?>);
+        $this-><?php echo $stateColumnSetter ?>(<?php echo $objectClassName ?>::<?php echo $stateConstant ?>);
     }
 
     return $this;

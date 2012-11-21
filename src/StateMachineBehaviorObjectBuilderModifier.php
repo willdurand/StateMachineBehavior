@@ -59,6 +59,7 @@ class StateMachineBehaviorObjectBuilderModifier
     {
         return $this->behavior->renderTemplate('objectGetAvailableStates', array(
             'states'            => $this->behavior->getStates(),
+            'objectClassName'   => $this->getObjectClassName($builder)
         ));
     }
 
@@ -72,6 +73,7 @@ class StateMachineBehaviorObjectBuilderModifier
         return $this->behavior->renderTemplate('objectHumanizedState', array(
             'humanizedStates'   => $array,
             'stateColumnGetter' => $this->getColumnGetter('state_column'),
+            'objectClassName'   => $this->getObjectClassName($builder),
         ));
     }
 
@@ -84,6 +86,7 @@ class StateMachineBehaviorObjectBuilderModifier
 
         return $this->behavior->renderTemplate('objectGetNormalizedState', array(
             'states'   => $map,
+            'objectClassName'   => $this->getObjectClassName($builder),
         ));
     }
 
@@ -116,6 +119,7 @@ class StateMachineBehaviorObjectBuilderModifier
         return $this->behavior->renderTemplate('objectIssers', array(
             'issers'            => $issers,
             'stateColumnGetter' => $this->getColumnGetter('state_column'),
+            'objectClassName'   => $this->getObjectClassName($builder),
         ));
     }
 
@@ -132,6 +136,7 @@ class StateMachineBehaviorObjectBuilderModifier
                 'methodName'        => $this->getSymbolCanner($symbol),
                 'antecedents'       => $antecedentConstants,
                 'state'             => $this->getStateConstant($this->behavior->getStateForSymbol($symbol)),
+                'objectClassName'   => $this->getObjectClassName($builder),
             ));
         }
 
@@ -153,6 +158,7 @@ class StateMachineBehaviorObjectBuilderModifier
                 'postHookMethodName'    => $this->getSymbolPostHook($symbol),
                 'stateConstant'         => $this->getStateConstant($this->behavior->getStateForSymbol($symbol)),
                 'stateColumnSetter'     => $this->getColumnSetter('state_column'),
+                'objectClassName'       => $this->getObjectClassName($builder),
             ));
         }
 
@@ -171,6 +177,7 @@ class StateMachineBehaviorObjectBuilderModifier
         return $this->behavior->renderTemplate('objectPostHooks', array(
             'stateColumnGetter'     => $this->getColumnGetter('state_column'),
             'states'                => $states,
+            'objectClassName'       => $this->getObjectClassName($builder),
         ));
     }
 

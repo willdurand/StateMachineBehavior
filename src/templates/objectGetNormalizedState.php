@@ -6,8 +6,8 @@ public function getNormalizedState()
 {
     switch ($this->getState()) {
 <?php foreach ($states as $state => $name) : ?>
-        case self::<?php echo $state ?>:
-            return self::<?php echo $name; ?>;
+        case <?php echo $objectClassName ?>::<?php echo $state ?>:
+            return <?php echo $objectClassName ?>::<?php echo $name; ?>;
 
 <?php endforeach; ?>
         default:
@@ -23,7 +23,7 @@ public static function getNormalizedStates()
 {
     return array(
 <?php foreach ($states as $state => $name) : ?>
-        self::<?php echo $name ?>,
+    <?php echo $objectClassName ?>::<?php echo $name ?>,
 <?php endforeach; ?>
     );
 }
