@@ -125,7 +125,7 @@ class StateMachineBehaviorObjectBuilderModifier
         foreach ($this->behavior->getSymbols() as $symbol) {
             $antecedentConstants = array();
             foreach ($this->behavior->getAntecedentStates($symbol) as $antecedent) {
-                $antecedentConstants[] = 'self::' . $this->getStateConstant($antecedent);
+                $antecedentConstants[] = 'static::' . $this->getStateConstant($antecedent);
             }
 
             $script .= $this->behavior->renderTemplate('objectCanner', array(
