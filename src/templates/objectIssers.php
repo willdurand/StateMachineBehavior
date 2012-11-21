@@ -5,7 +5,7 @@
  */
 public function <?php echo $isser['methodName'] ?>()
 {
-	return null !== $this-><?php echo $stateColumnGetter ?>() && self::<?php echo $isser['constantName'] ?> === $this-><?php echo $stateColumnGetter ?>();
+	return null !== $this-><?php echo $stateColumnGetter ?>() && static::<?php echo $isser['constantName'] ?> === $this-><?php echo $stateColumnGetter ?>();
 }
 
 <?php endforeach; ?>
