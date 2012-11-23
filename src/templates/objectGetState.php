@@ -3,5 +3,5 @@
  */
 public function getState()
 {
-	return $this-><?php echo $stateColumnGetter ?>();
+    return $this-><?php echo $stateColumnGetter ?>();
 }

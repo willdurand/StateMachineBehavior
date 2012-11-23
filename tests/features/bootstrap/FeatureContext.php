@@ -24,7 +24,7 @@ class FeatureContext extends BehatContext
      * Initializes context.
      * Every scenario gets it's own context object.
      *
-     * @param   array   $parameters     context parameters (set them up through behat.yml)
+     * @param array $parameters context parameters (set them up through behat.yml)
      */
     public function __construct(array $parameters)
     {
@@ -66,7 +66,8 @@ class FeatureContext extends BehatContext
      */
     public function iIt($symbolMethod)
     {
-        $this->instance->$symbolMethod();
+        assertTrue(is_callable(array($this->instance, $symbolMethod)));
+        $this->instance->{$symbolMethod}();
     }
 
     /**
@@ -85,7 +86,8 @@ class FeatureContext extends BehatContext
     public function iShouldBeAbleToIt($symbolMethod)
     {
         $canner = 'can' . ucfirst($symbolMethod);
-        assertTrue($this->instance->$canner());
+        assertTrue(is_callable(array($this->instance, $canner)));
+        assertTrue($this->instance->{$canner}());
     }
 
     /**
@@ -95,6 +97,7 @@ class FeatureContext extends BehatContext
     public function iShouldNotBeAbleToIt($symbolMethod)
     {
         $canner = 'can' . ucfirst($symbolMethod);
-        assertFalse($this->instance->$canner());
+        assertTrue(is_callable(array($this->instance, $canner)));
+        assertFalse($this->instance->{$canner}());
     }
 }

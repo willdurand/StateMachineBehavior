@@ -14,10 +14,10 @@ class StateMachineBehavior extends Behavior
      * @var array
      */
     protected $parameters = array(
-        'states'         => array(),
-        'initial_state'  => null,
-        'transition'     => array(),
-        'state_column'   => self::DEFAULT_STATE_COLUMN,
+        'states'           => array(),
+        'initial_state'    => null,
+        'transition'       => array(),
+        'state_column'     => self::DEFAULT_STATE_COLUMN,
         'with_description' => 'false',
     );
 
@@ -88,8 +88,6 @@ class StateMachineBehavior extends Behavior
         $states       = $this->getStates();
         $defaultValue = array_search($this->getInitialState(), $states);
 
-
-        // add the 'is_published' column
         if (!$this->getTable()->containsColumn($this->getParameter('state_column'))) {
             $column = array(
                 'name'          => $this->getParameter('state_column'),
