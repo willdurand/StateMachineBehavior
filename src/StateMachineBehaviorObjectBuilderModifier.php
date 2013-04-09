@@ -12,6 +12,14 @@ class StateMachineBehaviorObjectBuilderModifier
         $this->behavior = $behavior;
     }
 
+    public function preSave($builder)
+    {
+        return sprintf(
+            '$isStateColumnModified = $this->isColumnModified(%s);',
+            $this->behavior->getTable()->getColumn($this->behavior->getParameter('state_column'))->getConstantName()
+        );
+    }
+
     public function preInsert($builder)
     {
     }
