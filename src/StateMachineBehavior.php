@@ -1,4 +1,6 @@
 <?php
+require_once dirname(__FILE__) . '/StateMachineBehaviorObjectBuilderModifier.php';
+require_once dirname(__FILE__) . '/StateMachineBehaviorQueryBuilderModifier.php';
 
 /**
  * @author William Durand <william.durand1@gmail.com>
