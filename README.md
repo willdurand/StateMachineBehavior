@@ -20,7 +20,7 @@ This behavior adds a finite state machine to your model.
     <parameter name="transition" value="unpublished to published with publish" />
 
     <!-- Optional parameters -->
-    <parameter name="state_column" name="state" />
+    <parameter name="state_column" value="state" />
 </behavior>
 ```
 
