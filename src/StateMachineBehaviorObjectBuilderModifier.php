@@ -161,6 +161,8 @@ class StateMachineBehaviorObjectBuilderModifier
                 'postHookMethodName'    => $this->getSymbolPostHook($symbol),
                 'stateConstant'         => $this->getStateConstant($this->behavior->getStateForSymbol($symbol)),
                 'stateColumnSetter'     => $this->getColumnSetter('state_column'),
+                'timestampable'         => $this->behavior->isTimestampable(),
+                'timestampColumnSetter' => $this->behavior->isTimestampable() ? 'set'.$this->behavior->getTable()->getColumn($this->behavior->getStateForSymbol($symbol).'_at')->getPhpName() : '',
             ));
         }
 

@@ -21,6 +21,7 @@ This behavior adds a finite state machine to your model.
 
     <!-- Optional parameters -->
     <parameter name="state_column" value="state" />
+    <parameter name="timestampable" value="true" />
 </behavior>
 ```
 
@@ -37,6 +38,7 @@ Each transition has to follow this pattern:
 A `symbol`, which is part of the Finite State Machine's terminology, can be considered as an event triggered
 on your model object.
 
+The `timestampable` option can be added to log in `the_given_state_at` column the date when the state is setted
 
 ### ActiveRecord API ###
 

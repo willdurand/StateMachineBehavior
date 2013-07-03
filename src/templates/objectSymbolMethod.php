@@ -14,6 +14,8 @@ public function <?php echo $methodName ?>(PropelPDO $con = null)
         $this-><?php echo $onHookMethodName ?>($con);
 
         $this-><?php echo $stateColumnSetter ?>(static::<?php echo $stateConstant ?>);
+        <?php if ($timestampable): ?>$this-><?php echo $timestampColumnSetter ?>(time());
+<?php endif; ?>
     }
 
     return $this;
