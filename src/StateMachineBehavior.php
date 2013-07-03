@@ -101,6 +101,31 @@ class StateMachineBehavior extends Behavior
 
             $this->getTable()->addColumn($column);
         }
+
+        if ($this->isTimestampable()) {
+            foreach ($states as $state) {
+                $column = array(
+                    'name'          => $state.'_at',
+                    'type'          => 'TIMESTAMP',
+                    'required'      => false,
+                );
+
+                if ('true' === $this->getParameter('with_description')) {
+                    $column['description'] = 'Last time state '.$state.' has been set';
+                }
+
+                $this->getTable()->addColumn($column);
+            }
+        }
+    }
+
+    /**
+     * Check if timestampable option is true
+     * @return boolean true if timestampable option equal "true"
+     */
+    public function isTimestampable()
+    {
+        return $this->booleanValue($this->getParameter('timestampable'));
     }
 
     /**
