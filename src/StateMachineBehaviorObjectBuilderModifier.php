@@ -14,10 +14,17 @@ class StateMachineBehaviorObjectBuilderModifier
 
     public function preSave($builder)
     {
-        return sprintf(
-            '$isStateColumnModified = $this->isColumnModified(%s);',
-            $this->behavior->getTable()->getColumn($this->behavior->getParameter('state_column'))->getConstantName()
-        );
+        $timestampColumnSetters = array();
+        foreach ($this->behavior->getStates() as $state) {
+            $timestampColumnSetters[$this->getStateConstant($state)] = $this->behavior->isTimestampable() ? 'set'.$this->behavior->getTable()->getColumn($state.'_at')->getPhpName() : '';
+        }
+
+        return $this->behavior->renderTemplate('objectPreSave', array(
+            'stateColumn'            => $this->behavior->getTable()->getColumn($this->behavior->getParameter('state_column'))->getConstantName(),
+            'stateColumnGetter'      => $this->getColumnGetter('state_column'),
+            'timestampable'          => $this->behavior->isTimestampable(),
+            'timestampColumnSetters' => $timestampColumnSetters,
+        ));
     }
 
     public function preInsert($builder)
@@ -161,8 +168,6 @@ class StateMachineBehaviorObjectBuilderModifier
                 'postHookMethodName'    => $this->getSymbolPostHook($symbol),
                 'stateConstant'         => $this->getStateConstant($this->behavior->getStateForSymbol($symbol)),
                 'stateColumnSetter'     => $this->getColumnSetter('state_column'),
-                'timestampable'         => $this->behavior->isTimestampable(),
-                'timestampColumnSetter' => $this->behavior->isTimestampable() ? 'set'.$this->behavior->getTable()->getColumn($this->behavior->getStateForSymbol($symbol).'_at')->getPhpName() : '',
             ));
         }
 
