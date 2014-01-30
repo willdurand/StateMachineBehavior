@@ -2,6 +2,7 @@
     "name": "willdurand/propel-statemachine-behavior",
     "description": "Adds a finite state machine to your model.",
     "keywords": [ "propel", "behavior", "state machine" ],
+    "license": "MIT",
     "authors": [
         {
             "name": "William DURAND",
@@ -21,5 +22,10 @@
     },
     "config": {
         "bin-dir": "bin/"
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "1.0-dev"
+        }
     }
 }
